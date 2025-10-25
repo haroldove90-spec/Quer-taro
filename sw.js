@@ -37,38 +37,38 @@ self.addEventListener('activate', event => {
 
 // Fetch event: handle requests
 self.addEventListener('fetch', event => {
-  // For navigation requests, use a network-first strategy to get updates,
-  // but fall back to cache if the network fails, ensuring the app always loads.
+  // For navigation requests, serve the app shell from the cache immediately.
+  // This is the App Shell model, which is ideal for Single Page Applications.
+  // It ensures the app loads reliably and quickly, fixing the 404 issue on launch.
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
-        .catch(() => {
-          // Network failed, serve the app shell from cache
-          return caches.open(CACHE_NAME)
-            .then(cache => cache.match(APP_SHELL_URL));
-        })
+      caches.match(APP_SHELL_URL).then(response => {
+        // If the app shell is in the cache, return it.
+        // Otherwise, fetch it from the network (this is a fallback).
+        return response || fetch(APP_SHELL_URL);
+      })
     );
     return;
   }
 
-  // For all other requests (assets, scripts), use a cache-first strategy for speed.
+  // For all other requests (assets, scripts), use a cache-first strategy.
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Cache hit - return response
+        // Cache hit - return the response from cache.
         if (response) {
           return response;
         }
 
-        // Not in cache - fetch from network, then add to cache for next time.
+        // Not in cache - fetch from network.
         return fetch(event.request).then(
           networkResponse => {
             if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
               return networkResponse;
             }
             
+            // If the fetch is successful, clone the response and cache it.
             const responseToCache = networkResponse.clone();
-
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
