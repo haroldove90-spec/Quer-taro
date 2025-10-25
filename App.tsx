@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
 import Dashboard from './components/pages/Dashboard';
@@ -23,6 +24,34 @@ const SettingsPage = () => <PlaceholderPage title="Ajustes y Permisos" />;
 const App: React.FC = () => {
   const [activePage, setActivePage] = useState<Page>('dashboard');
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+    };
+  }, []);
+
+  const handleInstallClick = () => {
+    if (!installPrompt) {
+      return;
+    }
+    installPrompt.prompt();
+    installPrompt.userChoice.then((choiceResult: { outcome: string }) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      setInstallPrompt(null);
+    });
+  };
 
   const renderPage = () => {
     switch (activePage) {
@@ -58,6 +87,11 @@ const App: React.FC = () => {
             setSidebarOpen(false); // Close sidebar on navigation on mobile
         }}
         isSidebarOpen={isSidebarOpen} 
+        installPrompt={installPrompt}
+        onInstallClick={() => {
+          handleInstallClick();
+          setSidebarOpen(false);
+        }}
       />
       <div className={`flex-1 flex flex-col transition-all duration-300 sm:ml-64`}>
         {isSidebarOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black opacity-50 z-30 sm:hidden"></div>}
