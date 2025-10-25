@@ -1,11 +1,10 @@
-const CACHE_NAME = 'llama-queretaro-cache-v4';
-// The start_url in manifest.json is '.', which resolves to the root.
+const CACHE_NAME = 'llama-queretaro-cache-v5';
+// The start_url in manifest.json is '/', which resolves to the root.
 // We will cache '/index.html' and serve it for all navigation requests.
 const APP_SHELL_URL = '/index.html';
 const urlsToCache = [
   '/',
   APP_SHELL_URL,
-  '/index.tsx',
   '/manifest.json',
 ];
 
