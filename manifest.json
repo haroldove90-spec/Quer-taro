@@ -1,6 +1,19 @@
 {
   "short_name": "Llama Qro",
   "name": "Llama Querétaro Condo Manager",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIiBmaWxsPSIjMTBiOTgxIi8+PHBhdGggZD0iTTc5LjUgNTIuODNWNzlaMjAuNVY1Mi44M0w1MCAyOS41bDI5LjUgMjMuMzN6TTczIDcyLjVWNTVuNDJsLTIzLTE4LjE3LTIzIDE4LjE3VjcyLjVoMTQuNjd2LTEyaDE2LjY2djEySDczeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIiBmaWxsPSIjMTBiOTgxIi8+PHBhdGggZD0iTTc5LjUgNTIuODNWNzlaMjAuNVY1Mi44M0w1MCAyOS41bDI5LjUgMjMuMzN6TTczIDcyLjVWNTVuNDJsLTIzLTE4LjE3LTIzIDE4LjE3VjcyLjVoMTQuNjd2LTEyaDE2LjY2djEySDczeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#10b981",
