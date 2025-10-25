@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { Card, CardTitle, CardContent } from '../ui/Card';
 import { transactions as allTransactions, properties, owners, expenses } from '../../data/mockData';
@@ -94,33 +93,35 @@ const FinancePage: React.FC<FinancePageProps> = ({ currentUser }) => {
             {currentUser.role === UserRole.Admin && <Button leftIcon={ICONS.plus}>Registrar Pago</Button>}
         </div>
         <CardContent>
-          <Table headers={['Propiedad', 'Propietario', 'Fecha', 'Tipo', 'Monto', 'Estatus', 'Acciones']}>
-            {transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map(tx => (
-              <TableRow key={tx.id}>
-                <TableCell>
-                  <div className="font-bold text-gray-900 dark:text-white">{getPropertyInfo(tx.propertyId).lot}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-gray-600 dark:text-gray-300">{getPropertyInfo(tx.propertyId).owner}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-gray-600 dark:text-gray-300">{tx.date}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-gray-600 dark:text-gray-300">{tx.type}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="font-medium text-gray-800 dark:text-gray-100">{formatCurrency(tx.amount)}</div>
-                </TableCell>
-                <TableCell>{getStatusBadge(tx.status)}</TableCell>
-                <TableCell>
-                  <Button size="sm" variant="secondary" leftIcon={ICONS.receipt}>
-                    Ver Recibo
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </Table>
+          <div className="overflow-x-auto">
+            <Table headers={['Propiedad', 'Propietario', 'Fecha', 'Tipo', 'Monto', 'Estatus', 'Acciones']}>
+              {transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map(tx => (
+                <TableRow key={tx.id}>
+                  <TableCell className="whitespace-nowrap">
+                    <div className="font-bold text-gray-900 dark:text-white">{getPropertyInfo(tx.propertyId).lot}</div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <div className="text-gray-600 dark:text-gray-300">{getPropertyInfo(tx.propertyId).owner}</div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <div className="text-gray-600 dark:text-gray-300">{tx.date}</div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <div className="text-gray-600 dark:text-gray-300">{tx.type}</div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <div className="font-medium text-gray-800 dark:text-gray-100">{formatCurrency(tx.amount)}</div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">{getStatusBadge(tx.status)}</TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <Button size="sm" variant="secondary" leftIcon={ICONS.receipt}>
+                      Ver Recibo
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </Table>
+          </div>
         </CardContent>
       </Card>
       
