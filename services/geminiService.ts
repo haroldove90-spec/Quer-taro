@@ -1,15 +1,26 @@
-
 import { GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.API_KEY;
+// Use a function to initialize the client lazily, preventing crashes if API_KEY is not set.
+const getAiClient = (() => {
+  let ai: GoogleGenAI | null = null;
+  let hasWarned = false;
+  return () => {
+    if (ai) return ai;
 
-if (!API_KEY) {
-  // In a real app, you'd handle this more gracefully.
-  // Here we assume it's set in the environment.
-  console.warn("Gemini API key not found. AI features will be disabled.");
-}
+    const API_KEY = process.env.API_KEY;
+    if (API_KEY) {
+      ai = new GoogleGenAI({ apiKey: API_KEY });
+      return ai;
+    }
 
-const ai = new GoogleGenAI({ apiKey: API_KEY! });
+    if (!hasWarned) {
+        console.warn("Gemini API key not found. AI features will be disabled.");
+        hasWarned = true;
+    }
+    return null;
+  }
+})();
+
 
 const CONDO_RULES = `
 Reglamento de la privada "Llama Querétaro":
@@ -23,7 +34,8 @@ Reglamento de la privada "Llama Querétaro":
 `;
 
 export const getAIResponse = async (prompt: string) => {
-  if (!API_KEY) {
+  const ai = getAiClient();
+  if (!ai) {
     return "La función de asistente AI no está disponible. Falta la clave de API.";
   }
 
@@ -44,7 +56,8 @@ export const getAIResponse = async (prompt: string) => {
 };
 
 export const generateAnnouncement = async (topic: string) => {
-    if (!API_KEY) {
+    const ai = getAiClient();
+    if (!ai) {
     return "La función de asistente AI no está disponible. Falta la clave de API.";
   }
   
