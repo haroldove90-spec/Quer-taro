@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface TableProps {
@@ -13,7 +12,7 @@ export const Table: React.FC<TableProps> = ({ headers, children }) => {
         <thead className="bg-gray-50 dark:bg-primary-800">
           <tr>
             {headers.map((header, index) => (
-              <th key={index} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              <th key={index} scope="col" className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 {header}
               </th>
             ))}
@@ -39,4 +38,4 @@ interface TableCellProps {
     className?: string;
 }
 
-export const TableCell: React.FC<TableCellProps> = ({children, className}) => <td className={`px-6 py-4 whitespace-nowrap text-sm ${className}`}>{children}</td>;
+export const TableCell: React.FC<TableCellProps> = ({children, className}) => <td className={`px-3 md:px-6 py-4 text-sm align-top ${className}`}>{children}</td>;
