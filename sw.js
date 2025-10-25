@@ -1,4 +1,7 @@
-const CACHE_NAME = 'llama-queretaro-cache-v2';
+
+const CACHE_NAME = 'llama-queretaro-cache-v3';
+// The start_url in manifest.json is '.', which resolves to the root.
+// We will cache '/index.html' and serve it for all navigation requests.
 const APP_SHELL_URL = '/index.html';
 const urlsToCache = [
   '/',
@@ -7,76 +10,84 @@ const urlsToCache = [
   '/manifest.json',
 ];
 
-// Install event: cache the app shell
+// Install: Caches the core app shell files.
 self.addEventListener('install', event => {
+  console.log('Service Worker: Install event in progress.');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
+        console.log('Service Worker: Caching App Shell');
         return cache.addAll(urlsToCache);
+      })
+      .catch(error => {
+        console.error('Service Worker: Caching failed:', error);
       })
   );
 });
 
-// Activate event: clean up old caches
+// Activate: Cleans up old caches and takes control.
 self.addEventListener('activate', event => {
+  console.log('Service Worker: Activate event in progress.');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Service Worker: clearing old cache');
-            return caches.delete(cacheName);
-          }
+        cacheNames.filter(cacheName => cacheName !== CACHE_NAME)
+        .map(cacheName => {
+          console.log('Service Worker: Deleting old cache:', cacheName);
+          return caches.delete(cacheName);
         })
       );
+    }).then(() => {
+        console.log('Service Worker: Claiming clients.');
+        return self.clients.claim();
     })
   );
-  return self.clients.claim();
 });
 
-// Fetch event: handle requests
+// Fetch: Handles all network requests.
 self.addEventListener('fetch', event => {
-  // For navigation requests, serve the app shell from the cache immediately.
-  // This is the App Shell model, which is ideal for Single Page Applications.
-  // It ensures the app loads reliably and quickly, fixing the 404 issue on launch.
-  if (event.request.mode === 'navigate') {
+  const { request } = event;
+
+  // For navigation requests, use the App Shell model (cache-first).
+  // This is critical for the PWA to launch correctly when offline or in standalone mode.
+  if (request.mode === 'navigate') {
     event.respondWith(
-      caches.match(APP_SHELL_URL).then(response => {
-        // If the app shell is in the cache, return it.
-        // Otherwise, fetch it from the network (this is a fallback).
-        return response || fetch(APP_SHELL_URL);
-      })
+      caches.match(APP_SHELL_URL)
+        .then(cachedResponse => {
+          // If the App Shell is in the cache, serve it.
+          if (cachedResponse) {
+            console.log('Service Worker: Serving App Shell from cache.');
+            return cachedResponse;
+          }
+          // If not in cache (should not happen after install), fetch it.
+          console.log('Service Worker: App Shell not in cache, fetching from network.');
+          return fetch(APP_SHELL_URL);
+        })
     );
     return;
   }
 
-  // For all other requests (assets, scripts), use a cache-first strategy.
+  // For all other requests (assets, etc.), use a cache-first strategy.
+  // This makes the app feel faster and work offline.
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return the response from cache.
-        if (response) {
-          return response;
+    caches.match(request)
+      .then(cachedResponse => {
+        // If we have a cached response, return it.
+        if (cachedResponse) {
+          return cachedResponse;
         }
 
-        // Not in cache - fetch from network.
-        return fetch(event.request).then(
-          networkResponse => {
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-              return networkResponse;
-            }
-            
-            // If the fetch is successful, clone the response and cache it.
+        // Otherwise, fetch from the network.
+        return fetch(request).then(networkResponse => {
+          // If the fetch is successful, clone the response and cache it for future use.
+          if (networkResponse && networkResponse.status === 200 && request.method === 'GET') {
             const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return networkResponse;
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(request, responseToCache);
+            });
           }
-        );
+          return networkResponse;
+        });
       })
   );
 });
