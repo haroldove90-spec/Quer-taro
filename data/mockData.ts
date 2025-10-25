@@ -1,5 +1,6 @@
 
-import { Property, Owner, Announcement, Transaction, Visitor, MaintenanceRequest, AmenityBooking, UserRole, Expense, User, Provider } from '../types';
+
+import { Property, Owner, Announcement, Transaction, Visitor, MaintenanceRequest, AmenityBooking, UserRole, Expense, User, Provider, MarketplaceItem, LocalBusiness, Package } from '../types';
 
 export const owners: Owner[] = [
   {
@@ -166,4 +167,22 @@ export const providers: Provider[] = [
     { id: 'prov-2', name: 'El Rayo Eléctrico', service: 'Electricista', phone: '442-987-6543', rating: 4 },
     { id: 'prov-3', name: 'Jardines de Querétaro', service: 'Jardinería', phone: '442-111-2233', rating: 5 },
     { id: 'prov-4', name: 'Limpieza Total', service: 'Limpieza de Interiores', phone: '442-555-9900', rating: 4 },
+];
+
+export const marketplaceItems: MarketplaceItem[] = [
+    { id: 'mkt-1', title: 'Bicicleta de Montaña', description: 'Poco uso, excelentes condiciones. Rodada 26.', price: 2500, imageUrl: 'https://placehold.co/600x400/34d399/FFFFFF/png?text=Bicicleta', sellerId: 'owner-1', datePosted: '2023-10-20' },
+    { id: 'mkt-2', title: 'Sillón de 3 Plazas', description: 'Cómodo sillón color gris, ideal para sala.', price: 4000, imageUrl: 'https://placehold.co/600x400/6ee7b7/FFFFFF/png?text=Sillón', sellerId: 'owner-4', datePosted: '2023-10-18' },
+    { id: 'mkt-3', title: 'Lámpara de Escritorio LED', description: 'Moderna y funcional, con varios niveles de intensidad.', price: 350, imageUrl: 'https://placehold.co/600x400/a7f3d0/FFFFFF/png?text=Lámpara', sellerId: 'owner-2', datePosted: '2023-10-22' },
+];
+
+export const localBusinesses: LocalBusiness[] = [
+    { id: 'biz-1', name: 'Taquería "El Llama Veloz"', category: 'Restaurante', phone: '442-123-1234', address: 'Av. Principal 123' },
+    { id: 'biz-2', name: 'Farmacia La Salud', category: 'Salud', phone: '442-456-4567', address: 'Calle Secundaria 45' },
+    { id: 'biz-3', name: 'Lavandería "Clean Fast"', category: 'Servicios', phone: '442-789-7890', address: 'Plaza Comercial Llama' },
+];
+
+export const packages: Package[] = [
+    { id: 'pkg-1', propertyId: 'prop-1', carrier: 'Mercado Libre', receivedDate: '2023-10-22 11:00', status: 'Recibido en caseta', pickedUpDate: null },
+    { id: 'pkg-2', propertyId: 'prop-2', carrier: 'Amazon', receivedDate: '2023-10-21 15:30', status: 'Entregado al residente', pickedUpDate: '2023-10-21 18:00' },
+    { id: 'pkg-3', propertyId: 'prop-4', carrier: 'DHL', receivedDate: '2023-10-22 09:15', status: 'Recibido en caseta', pickedUpDate: null },
 ];

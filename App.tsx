@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
@@ -10,6 +11,7 @@ import FinancePage from './components/pages/Finance';
 import SecurityPage from './components/pages/Security';
 import MaintenancePage from './components/pages/Maintenance';
 import SettingsPage from './components/pages/Settings';
+import ServicesPage from './components/pages/Services';
 import LoginPage from './components/pages/Login';
 import { Page, User, UserRole } from './types';
 import { users } from './data/mockData';
@@ -37,7 +39,8 @@ const App: React.FC = () => {
     const user = users.find(u => u.role === role);
     if (user) {
       setCurrentUser(user);
-      setActivePage('dashboard');
+      // Default page depends on role
+      setActivePage(role === UserRole.Guard ? 'security' : 'dashboard');
     }
   };
   
@@ -72,11 +75,13 @@ const App: React.FC = () => {
       case 'communication':
         return <Communication />;
       case 'finance':
-        return <FinancePage />;
+        return <FinancePage currentUser={currentUser}/>;
       case 'security':
         return <SecurityPage currentUser={currentUser} />;
       case 'maintenance':
-        return <MaintenancePage />;
+        return <MaintenancePage currentUser={currentUser}/>;
+      case 'services':
+        return <ServicesPage currentUser={currentUser} />;
       case 'settings':
         return <SettingsPage currentUser={currentUser} />;
       default:

@@ -1,12 +1,13 @@
 
+
 import React from 'react';
 import { Card, CardTitle, CardContent } from '../ui/Card';
 import { Table, TableRow, TableCell } from '../ui/Table';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { ICONS } from '../../constants';
-import { maintenanceRequests, properties, amenityBookings, providers } from '../../data/mockData';
-import { MaintenanceRequest } from '../../types';
+import { maintenanceRequests as allMaintenanceRequests, properties, amenityBookings as allAmenityBookings, providers, owners } from '../../data/mockData';
+import { MaintenanceRequest, User, UserRole } from '../../types';
 
 const getStatusBadge = (status: MaintenanceRequest['status']) => {
     switch (status) {
@@ -33,7 +34,27 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
     </div>
 );
 
-const MaintenancePage: React.FC = () => {
+interface MaintenancePageProps {
+  currentUser: User;
+}
+
+const MaintenancePage: React.FC<MaintenancePageProps> = ({ currentUser }) => {
+
+  let maintenanceRequests = allMaintenanceRequests;
+  let amenityBookings = allAmenityBookings;
+
+  if (currentUser.role === UserRole.Resident) {
+      const currentOwner = owners.find(o => o.email === currentUser.email);
+      const ownerProperty = properties.find(p => p.ownerId === currentOwner?.id);
+      if (ownerProperty) {
+          maintenanceRequests = allMaintenanceRequests.filter(r => r.propertyId === ownerProperty.id || r.propertyId === 'N/A');
+          amenityBookings = allAmenityBookings.filter(b => b.propertyId === ownerProperty.id);
+      } else {
+          maintenanceRequests = allMaintenanceRequests.filter(r => r.propertyId === 'N/A');
+          amenityBookings = [];
+      }
+  }
+
   return (
     <div className="p-4 sm:p-6 space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

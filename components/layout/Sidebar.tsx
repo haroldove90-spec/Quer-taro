@@ -1,7 +1,8 @@
 
+
 import React from 'react';
 import { APP_NAME, NAV_ITEMS, ICONS } from '../../constants';
-import { Page, UserRole, User } from '../../types';
+import { Page, User } from '../../types';
 
 interface SidebarProps {
   activePage: Page;
@@ -15,7 +16,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, isSidebarOpen, installPrompt, onInstallClick, currentUser, onLogout }) => {
   const visibleNavItems = NAV_ITEMS.filter(item => 
-    !item.adminOnly || (item.adminOnly && currentUser?.role === UserRole.Admin)
+    currentUser && item.roles.includes(currentUser.role)
   );
 
   return (

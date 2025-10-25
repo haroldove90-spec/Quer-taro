@@ -1,4 +1,5 @@
 
+
 export interface Owner {
   id: string;
   name: string;
@@ -87,7 +88,7 @@ export interface Provider {
   rating: number;
 }
 
-export type Page = 'dashboard' | 'properties' | 'residents' | 'communication' | 'finance' | 'security' | 'maintenance' | 'settings';
+export type Page = 'dashboard' | 'properties' | 'residents' | 'communication' | 'finance' | 'security' | 'maintenance' | 'settings' | 'services';
 
 export interface Expense {
   id: string;
@@ -95,4 +96,31 @@ export interface Expense {
   category: 'Mantenimiento' | 'Personal' | 'Servicios' | 'Administrativo';
   description: string;
   amount: number;
+}
+
+export interface MarketplaceItem {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  sellerId: string;
+  datePosted: string;
+}
+
+export interface LocalBusiness {
+  id: string;
+  name: string;
+  category: string;
+  phone: string;
+  address: string;
+}
+
+export interface Package {
+  id: string;
+  propertyId: string;
+  carrier: string;
+  receivedDate: string;
+  status: 'Recibido en caseta' | 'Entregado al residente';
+  pickedUpDate: string | null;
 }
