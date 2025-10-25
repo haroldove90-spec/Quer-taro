@@ -88,7 +88,7 @@ export interface Provider {
   rating: number;
 }
 
-export type Page = 'dashboard' | 'properties' | 'residents' | 'communication' | 'finance' | 'security' | 'maintenance' | 'settings' | 'services';
+export type Page = 'dashboard' | 'properties' | 'residents' | 'communication' | 'finance' | 'security' | 'maintenance' | 'settings' | 'services' | 'polls';
 
 export interface Expense {
   id: string;
@@ -123,4 +123,21 @@ export interface Package {
   receivedDate: string;
   status: 'Recibido en caseta' | 'Entregado al residente';
   pickedUpDate: string | null;
+}
+
+export interface PollOption {
+  id: string;
+  text: string;
+  votes: number;
+}
+
+export interface Poll {
+  id: string;
+  title: string;
+  description: string;
+  options: PollOption[];
+  status: 'active' | 'closed';
+  creationDate: string;
+  closingDate: string;
+  votedBy: string[]; // Array of owner IDs
 }

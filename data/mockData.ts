@@ -1,6 +1,6 @@
 
 
-import { Property, Owner, Announcement, Transaction, Visitor, MaintenanceRequest, AmenityBooking, UserRole, Expense, User, Provider, MarketplaceItem, LocalBusiness, Package } from '../types';
+import { Property, Owner, Announcement, Transaction, Visitor, MaintenanceRequest, AmenityBooking, UserRole, Expense, User, Provider, MarketplaceItem, LocalBusiness, Package, Poll } from '../types';
 
 export const owners: Owner[] = [
   {
@@ -185,4 +185,34 @@ export const packages: Package[] = [
     { id: 'pkg-1', propertyId: 'prop-1', carrier: 'Mercado Libre', receivedDate: '2023-10-22 11:00', status: 'Recibido en caseta', pickedUpDate: null },
     { id: 'pkg-2', propertyId: 'prop-2', carrier: 'Amazon', receivedDate: '2023-10-21 15:30', status: 'Entregado al residente', pickedUpDate: '2023-10-21 18:00' },
     { id: 'pkg-3', propertyId: 'prop-4', carrier: 'DHL', receivedDate: '2023-10-22 09:15', status: 'Recibido en caseta', pickedUpDate: null },
+];
+
+export const polls: Poll[] = [
+    {
+        id: 'poll-1',
+        title: 'Instalación de Nuevos Juegos Infantiles',
+        description: 'La administración propone renovar el área de juegos infantiles. Por favor, vote por la opción que prefiera.',
+        options: [
+            { id: 'opt-1-1', text: 'Opción A: Estructura de madera con resbaladilla y columpios', votes: 12 },
+            { id: 'opt-1-2', text: 'Opción B: Múltiples juegos de plástico de alta durabilidad', votes: 18 },
+            { id: 'opt-1-3', text: 'No es necesario renovar por ahora', votes: 3 },
+        ],
+        status: 'active',
+        creationDate: '2023-10-15',
+        closingDate: '2023-11-15',
+        votedBy: ['owner-2', 'owner-4'],
+    },
+    {
+        id: 'poll-2',
+        title: 'Cambio de Horario de la Alberca',
+        description: 'Se ha discutido la posibilidad de ampliar el horario de la alberca durante el verano. La votación ha concluido.',
+        options: [
+            { id: 'opt-2-1', text: 'Ampliar horario hasta las 10 PM', votes: 25 },
+            { id: 'opt-2-2', text: 'Mantener horario actual (9 PM)', votes: 10 },
+        ],
+        status: 'closed',
+        creationDate: '2023-09-01',
+        closingDate: '2023-09-30',
+        votedBy: ['owner-1', 'owner-2', 'owner-3', 'owner-4'],
+    }
 ];

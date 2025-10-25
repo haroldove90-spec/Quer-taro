@@ -12,8 +12,9 @@ import SecurityPage from './components/pages/Security';
 import MaintenancePage from './components/pages/Maintenance';
 import SettingsPage from './components/pages/Settings';
 import ServicesPage from './components/pages/Services';
+import PollsPage from './components/pages/Polls';
 import LoginPage from './components/pages/Login';
-import { Page, User, UserRole, Property, Owner, Transaction, Visitor, MaintenanceRequest, Package, MarketplaceItem } from './types';
+import { Page, User, UserRole, Property, Owner, Transaction, Visitor, MaintenanceRequest, Package, MarketplaceItem, Poll } from './types';
 import * as mockData from './data/mockData';
 import AIAssistant from './components/AIAssistant';
 
@@ -65,6 +66,7 @@ const App: React.FC = () => {
         marketplaceItems: mockData.marketplaceItems,
         localBusinesses: mockData.localBusinesses,
         packages: mockData.packages,
+        polls: mockData.polls,
     };
   });
   
@@ -92,6 +94,26 @@ const App: React.FC = () => {
   const addMaintenanceRequest = createHandler<MaintenanceRequest>('maintenanceRequests', 'Nueva Solicitud de Mantenimiento');
   const addPackage = createHandler<Package>('packages', 'Nuevo Paquete Registrado');
   const addMarketplaceItem = createHandler<MarketplaceItem>('marketplaceItems', 'Nuevo Artículo Publicado');
+  const addPoll = createHandler<Poll>('polls', 'Nueva Encuesta Publicada');
+
+  const handleVote = (pollId: string, optionId: string, ownerId: string) => {
+    setAppData(prevData => {
+        const newPolls = prevData.polls.map(poll => {
+            if (poll.id === pollId && !poll.votedBy.includes(ownerId)) {
+                const newOptions = poll.options.map(option => {
+                    if (option.id === optionId) {
+                        return { ...option, votes: option.votes + 1 };
+                    }
+                    return option;
+                });
+                return { ...poll, options: newOptions, votedBy: [...poll.votedBy, ownerId] };
+            }
+            return poll;
+        });
+        return { ...prevData, polls: newPolls };
+    });
+    showNotification('Voto Registrado', 'Gracias por participar en la encuesta.');
+  };
 
 
   useEffect(() => {
@@ -141,6 +163,8 @@ const App: React.FC = () => {
         return <ResidentsPage owners={appData.owners} properties={appData.properties} addOwner={addOwner}/>;
       case 'communication':
         return <Communication />;
+      case 'polls':
+        return <PollsPage currentUser={currentUser} polls={appData.polls} owners={appData.owners} addPoll={addPoll} handleVote={handleVote} />;
       case 'finance':
         return <FinancePage currentUser={currentUser} transactions={appData.transactions} properties={appData.properties} owners={appData.owners} expenses={appData.expenses} addTransaction={addTransaction} />;
       case 'security':
