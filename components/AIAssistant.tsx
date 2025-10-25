@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ICONS } from '../constants';
 import { getAIResponse } from '../services/geminiService';
+import { showNotification } from '../../App';
 
 interface Message {
   text: string;
@@ -35,6 +36,11 @@ const AIAssistant: React.FC = () => {
     
     setMessages(prev => [...prev, aiMessage]);
     setIsLoading(false);
+    
+    // Show notification when AI responds
+    if (document.visibilityState === 'hidden') {
+      showNotification('Asistente Virtual', aiMessage.text);
+    }
   };
 
   return (

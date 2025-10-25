@@ -1,12 +1,13 @@
 
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Card, CardTitle, CardContent } from '../ui/Card';
-import { transactions as allTransactions, properties, owners, expenses } from '../../data/mockData';
 import { Badge } from '../ui/Badge';
 import { Table, TableRow, TableCell } from '../ui/Table';
 import { Button } from '../ui/Button';
 import { ICONS } from '../../constants';
-import { Transaction, User, UserRole } from '../../types';
+import { Transaction, User, UserRole, Property, Owner, Expense } from '../../types';
+import { Modal } from '../ui/Modal';
 
 const StatCard: React.FC<{ title: string; value: string | number; icon: React.ReactElement; helpText?: string }> = ({ title, value, icon, helpText }) => (
   <Card>
@@ -25,9 +26,36 @@ const StatCard: React.FC<{ title: string; value: string | number; icon: React.Re
 
 interface FinancePageProps {
   currentUser: User;
+  transactions: Transaction[];
+  properties: Property[];
+  owners: Owner[];
+  expenses: Expense[];
+  addTransaction: (transaction: Transaction) => void;
 }
 
-const FinancePage: React.FC<FinancePageProps> = ({ currentUser }) => {
+const FinancePage: React.FC<FinancePageProps> = ({ currentUser, transactions: allTransactions, properties, owners, expenses, addTransaction }) => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newTx, setNewTx] = useState({ propertyId: '', type: 'Maintenance Fee', amount: '', status: 'Pending' });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewTx(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddTransaction = (e: React.FormEvent) => {
+    e.preventDefault();
+    const txToAdd: Transaction = {
+      id: `txn-${Date.now()}`,
+      propertyId: newTx.propertyId,
+      date: new Date().toISOString().split('T')[0],
+      type: newTx.type as Transaction['type'],
+      amount: parseFloat(newTx.amount),
+      status: newTx.status as Transaction['status'],
+    };
+    addTransaction(txToAdd);
+    setIsAddModalOpen(false);
+    setNewTx({ propertyId: '', type: 'Maintenance Fee', amount: '', status: 'Pending' });
+  };
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(amount);
@@ -47,11 +75,7 @@ const FinancePage: React.FC<FinancePageProps> = ({ currentUser }) => {
   if (currentUser.role === UserRole.Resident) {
       const currentOwner = owners.find(o => o.email === currentUser.email);
       const ownerProperty = properties.find(p => p.ownerId === currentOwner?.id);
-      if (ownerProperty) {
-          transactions = allTransactions.filter(t => t.propertyId === ownerProperty.id);
-      } else {
-          transactions = [];
-      }
+      transactions = ownerProperty ? allTransactions.filter(t => t.propertyId === ownerProperty.id) : [];
   }
 
 
@@ -64,17 +88,7 @@ const FinancePage: React.FC<FinancePageProps> = ({ currentUser }) => {
     }
   };
 
-  const totalIncome = transactions
-    .filter(t => t.status === 'Paid')
-    .reduce((sum, t) => sum + t.amount, 0);
-
-  const accountsReceivable = transactions
-    .filter(t => t.status !== 'Paid')
-    .reduce((sum, t) => sum + t.amount, 0);
-
   const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
-  
-  const netBalance = totalIncome - totalExpenses;
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
@@ -90,7 +104,7 @@ const FinancePage: React.FC<FinancePageProps> = ({ currentUser }) => {
       <Card>
         <div className="flex justify-between items-center mb-4">
             <CardTitle>Historial de Transacciones</CardTitle>
-            {currentUser.role === UserRole.Admin && <Button leftIcon={ICONS.plus}>Registrar Pago</Button>}
+            {currentUser.role === UserRole.Admin && <Button leftIcon={ICONS.plus} onClick={() => setIsAddModalOpen(true)}>Registrar Transacción</Button>}
         </div>
         <CardContent>
           <div className="overflow-x-auto">
@@ -124,6 +138,45 @@ const FinancePage: React.FC<FinancePageProps> = ({ currentUser }) => {
           </div>
         </CardContent>
       </Card>
+
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        title="Registrar Nueva Transacción"
+        footer={<><Button variant='secondary' onClick={() => setIsAddModalOpen(false)}>Cancelar</Button><Button onClick={handleAddTransaction}>Guardar</Button></>}
+      >
+        <form onSubmit={handleAddTransaction} className="space-y-4">
+            <div>
+                <label className="block text-sm font-medium">Propiedad</label>
+                <select name="propertyId" value={newTx.propertyId} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" required>
+                    <option value="">Seleccione una propiedad</option>
+                    {properties.map(p => <option key={p.id} value={p.id}>{`Lote ${p.lotNumber} - ${getPropertyInfo(p.id).owner}`}</option>)}
+                </select>
+            </div>
+             <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-sm font-medium">Tipo</label>
+                    <select name="type" value={newTx.type} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" required>
+                        <option>Maintenance Fee</option>
+                        <option>Fine</option>
+                        <option>Extra Service</option>
+                    </select>
+                </div>
+                 <div>
+                    <label className="block text-sm font-medium">Monto (MXN)</label>
+                    <input type="number" name="amount" value={newTx.amount} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" required/>
+                </div>
+             </div>
+             <div>
+                <label className="block text-sm font-medium">Estatus</label>
+                <select name="status" value={newTx.status} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" required>
+                    <option>Pending</option>
+                    <option>Paid</option>
+                    <option>Overdue</option>
+                </select>
+            </div>
+        </form>
+      </Modal>
       
       { currentUser.role === UserRole.Admin && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

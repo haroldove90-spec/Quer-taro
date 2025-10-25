@@ -1,15 +1,45 @@
 
+
 import React, { useState } from 'react';
-import { properties, owners } from '../../data/mockData';
-import { Property } from '../../types';
+import { Property, Owner } from '../../types';
 import { Card, CardTitle, CardContent } from '../ui/Card';
 import { Table, TableRow, TableCell } from '../ui/Table';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 import { ICONS } from '../../constants';
 
-const PropertiesPage: React.FC = () => {
+interface PropertiesPageProps {
+  properties: Property[];
+  owners: Owner[];
+  addProperty: (property: Property) => void;
+}
+
+const PropertiesPage: React.FC<PropertiesPageProps> = ({ properties, owners, addProperty }) => {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newProperty, setNewProperty] = useState({ lotNumber: '', address: '', model: '', sqMeters: '', ownerId: '' });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewProperty(prev => ({ ...prev, [name]: value }));
+  };
+  
+  const handleAddProperty = (e: React.FormEvent) => {
+    e.preventDefault();
+    const propertyToAdd: Property = {
+        id: `prop-${Date.now()}`,
+        lotNumber: parseInt(newProperty.lotNumber, 10),
+        address: newProperty.address,
+        model: newProperty.model,
+        sqMeters: parseInt(newProperty.sqMeters, 10),
+        ownerId: newProperty.ownerId,
+        occupationHistory: newProperty.ownerId ? [{ ownerId: newProperty.ownerId, from: new Date().toISOString().split('T')[0], to: null }] : [],
+        documents: [],
+    };
+    addProperty(propertyToAdd);
+    setIsAddModalOpen(false);
+    setNewProperty({ lotNumber: '', address: '', model: '', sqMeters: '', ownerId: '' });
+  };
 
   const getOwnerName = (ownerId: string) => {
     return owners.find(o => o.id === ownerId)?.name || 'Sin Asignar';
@@ -20,7 +50,7 @@ const PropertiesPage: React.FC = () => {
       <Card>
         <div className="flex justify-between items-center mb-4">
             <CardTitle>Listado de Inmuebles</CardTitle>
-            <Button leftIcon={ICONS.plus}>Registrar Inmueble</Button>
+            <Button leftIcon={ICONS.plus} onClick={() => setIsAddModalOpen(true)}>Registrar Inmueble</Button>
         </div>
         <CardContent>
           <div className="overflow-x-auto">
@@ -50,7 +80,51 @@ const PropertiesPage: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+      
+      {/* Add Property Modal */}
+      <Modal 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)}
+        title="Registrar Nuevo Inmueble"
+        footer={
+            <>
+                <Button variant="secondary" onClick={() => setIsAddModalOpen(false)}>Cancelar</Button>
+                <Button onClick={handleAddProperty}>Guardar</Button>
+            </>
+        }
+      >
+        <form onSubmit={handleAddProperty} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Número de Lote</label>
+                    <input type="number" name="lotNumber" value={newProperty.lotNumber} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600 shadow-sm" required/>
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Modelo</label>
+                    <input type="text" name="model" value={newProperty.model} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600 shadow-sm" required/>
+                </div>
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Dirección</label>
+                <input type="text" name="address" value={newProperty.address} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600 shadow-sm" required/>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Metros Cuadrados</label>
+                    <input type="number" name="sqMeters" value={newProperty.sqMeters} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600 shadow-sm" required/>
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Propietario</label>
+                    <select name="ownerId" value={newProperty.ownerId} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600 shadow-sm">
+                        <option value="">Sin Asignar</option>
+                        {owners.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
+                    </select>
+                </div>
+            </div>
+        </form>
+      </Modal>
 
+      {/* View Details Modal */}
       {selectedProperty && (
         <Modal 
             isOpen={!!selectedProperty} 
@@ -70,13 +144,15 @@ const PropertiesPage: React.FC = () => {
                 </div>
                 <div>
                     <h4 className="font-bold text-gray-800 dark:text-gray-100">Documentación</h4>
-                    <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mt-2">
-                       {selectedProperty.documents.map(doc => (
-                           <li key={doc.name}>
-                               <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">{doc.name}</a>
-                           </li>
-                       ))}
-                    </ul>
+                    {selectedProperty.documents.length > 0 ? (
+                        <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mt-2">
+                        {selectedProperty.documents.map(doc => (
+                            <li key={doc.name}>
+                                <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">{doc.name}</a>
+                            </li>
+                        ))}
+                        </ul>
+                    ) : <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">No hay documentos.</p>}
                 </div>
                  <div>
                     <h4 className="font-bold text-gray-800 dark:text-gray-100">Historial de Ocupación</h4>

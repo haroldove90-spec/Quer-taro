@@ -1,13 +1,13 @@
 
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardTitle, CardContent } from '../ui/Card';
 import { Table, TableRow, TableCell } from '../ui/Table';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { ICONS } from '../../constants';
-import { maintenanceRequests as allMaintenanceRequests, properties, amenityBookings as allAmenityBookings, providers, owners } from '../../data/mockData';
-import { MaintenanceRequest, User, UserRole } from '../../types';
+import { MaintenanceRequest, User, UserRole, Property, AmenityBooking, Provider, Owner } from '../../types';
+import { Modal } from '../ui/Modal';
 
 const getStatusBadge = (status: MaintenanceRequest['status']) => {
     switch (status) {
@@ -16,12 +16,6 @@ const getStatusBadge = (status: MaintenanceRequest['status']) => {
       case 'Pending': return <Badge color="yellow">Pendiente</Badge>;
       default: return <Badge color="gray">Desconocido</Badge>;
     }
-};
-
-const getPropertyLot = (propertyId: string) => {
-    if (propertyId === 'N/A') return 'Área Común';
-    const prop = properties.find(p => p.id === propertyId);
-    return prop ? `Lote ${prop.lotNumber}` : 'N/A';
 };
 
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
@@ -36,10 +30,53 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
 
 interface MaintenancePageProps {
   currentUser: User;
+  maintenanceRequests: MaintenanceRequest[];
+  amenityBookings: AmenityBooking[];
+  providers: Provider[];
+  properties: Property[];
+  owners: Owner[];
+  addMaintenanceRequest: (req: MaintenanceRequest) => void;
 }
 
-const MaintenancePage: React.FC<MaintenancePageProps> = ({ currentUser }) => {
-
+const MaintenancePage: React.FC<MaintenancePageProps> = ({ currentUser, maintenanceRequests: allMaintenanceRequests, amenityBookings: allAmenityBookings, providers, properties, owners, addMaintenanceRequest }) => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newRequest, setNewRequest] = useState({ area: '', description: '', propertyId: '' });
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewRequest(prev => ({...prev, [name]: value}));
+  };
+  
+  const handleAddRequest = (e: React.FormEvent) => {
+    e.preventDefault();
+    const currentOwner = owners.find(o => o.email === currentUser.email);
+    const ownerProperty = properties.find(p => p.ownerId === currentOwner?.id);
+    
+    // If admin is creating, use the selected property. If resident, use their own.
+    let propId = newRequest.propertyId;
+    if(currentUser.role === UserRole.Resident && ownerProperty) {
+      propId = ownerProperty.id;
+    }
+    
+    const requestToAdd: MaintenanceRequest = {
+        id: `req-${Date.now()}`,
+        area: newRequest.area,
+        description: newRequest.description,
+        propertyId: propId === 'common' ? 'N/A' : propId,
+        status: 'Pending',
+        submittedDate: new Date().toISOString().split('T')[0],
+    };
+    addMaintenanceRequest(requestToAdd);
+    setIsAddModalOpen(false);
+    setNewRequest({ area: '', description: '', propertyId: '' });
+  };
+  
+  const getPropertyLot = (propertyId: string) => {
+    if (propertyId === 'N/A') return 'Área Común';
+    const prop = properties.find(p => p.id === propertyId);
+    return prop ? `Lote ${prop.lotNumber}` : 'N/A';
+  };
+  
   let maintenanceRequests = allMaintenanceRequests;
   let amenityBookings = allAmenityBookings;
 
@@ -62,7 +99,7 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({ currentUser }) => {
             <Card>
                 <div className="flex justify-between items-center mb-4">
                     <CardTitle>Solicitudes de Mantenimiento</CardTitle>
-                    <Button leftIcon={ICONS.plus}>Nuevo Reporte</Button>
+                    <Button leftIcon={ICONS.plus} onClick={() => setIsAddModalOpen(true)}>Nuevo Reporte</Button>
                 </div>
                 <CardContent>
                     <div className="overflow-x-auto">
@@ -80,6 +117,34 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({ currentUser }) => {
                     </div>
                 </CardContent>
             </Card>
+
+            <Modal
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
+                title="Nuevo Reporte de Mantenimiento"
+                footer={<><Button variant="secondary" onClick={() => setIsAddModalOpen(false)}>Cancelar</Button><Button onClick={handleAddRequest}>Enviar Reporte</Button></>}
+            >
+                <form onSubmit={handleAddRequest} className="space-y-4">
+                    {currentUser.role === UserRole.Admin && (
+                        <div>
+                            <label className="block text-sm font-medium">Propiedad</label>
+                            <select name="propertyId" value={newRequest.propertyId} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" required>
+                                <option value="">Seleccione...</option>
+                                <option value="common">Área Común</option>
+                                {properties.map(p => <option key={p.id} value={p.id}>{`Lote ${p.lotNumber}`}</option>)}
+                            </select>
+                        </div>
+                    )}
+                     <div>
+                        <label className="block text-sm font-medium">Área Específica</label>
+                        <input type="text" name="area" value={newRequest.area} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" placeholder="Ej: Jardín frontal, Baño principal" required/>
+                    </div>
+                     <div>
+                        <label className="block text-sm font-medium">Descripción del Problema</label>
+                        <textarea name="description" value={newRequest.description} onChange={handleInputChange} rows={4} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" required></textarea>
+                    </div>
+                </form>
+            </Modal>
 
             <Card>
                 <CardTitle>Reservación de Amenidades</CardTitle>

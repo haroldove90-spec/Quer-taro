@@ -1,12 +1,13 @@
 
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Card, CardTitle, CardContent } from '../ui/Card';
 import { Table, TableRow, TableCell } from '../ui/Table';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { ICONS } from '../../constants';
-import { visitors, properties, owners } from '../../data/mockData';
-import { Visitor, User, UserRole } from '../../types';
+import { Visitor, User, UserRole, Property, Owner } from '../../types';
+import { Modal } from '../ui/Modal';
 
 const getStatusBadge = (status: Visitor['status']) => {
     switch (status) {
@@ -17,18 +18,46 @@ const getStatusBadge = (status: Visitor['status']) => {
     }
 };
 
-const getPropertyInfo = (propertyId: string) => {
+interface SecurityPageProps {
+    currentUser: User;
+    visitors: Visitor[];
+    properties: Property[];
+    owners: Owner[];
+    addVisitor: (visitor: Visitor) => void;
+}
+
+const SecurityPage: React.FC<SecurityPageProps> = ({ currentUser, visitors, properties, owners, addVisitor }) => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newVisitor, setNewVisitor] = useState({ name: '', idNumber: '', propertyId: '' });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewVisitor(prev => ({...prev, [name]: value}));
+  };
+  
+  const handleAddVisitor = (e: React.FormEvent) => {
+    e.preventDefault();
+    const visitorToAdd: Visitor = {
+      id: `vis-${Date.now()}`,
+      name: newVisitor.name,
+      idNumber: newVisitor.idNumber,
+      propertyId: newVisitor.propertyId,
+      entryDate: new Date().toLocaleString('es-MX'),
+      exitDate: null,
+      status: 'Inside',
+    };
+    addVisitor(visitorToAdd);
+    setIsAddModalOpen(false);
+    setNewVisitor({ name: '', idNumber: '', propertyId: '' });
+  };
+    
+  const getPropertyInfo = (propertyId: string) => {
     const prop = properties.find(p => p.id === propertyId);
     if (!prop) return 'Área Común';
     const owner = owners.find(o => o.id === prop.ownerId);
     return `Lote ${prop.lotNumber} (${owner?.name || 'N/A'})`;
-};
+  };
 
-interface SecurityPageProps {
-    currentUser: User;
-}
-
-const SecurityPage: React.FC<SecurityPageProps> = ({ currentUser }) => {
   return (
     <div className="p-4 sm:p-6 space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -36,7 +65,7 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ currentUser }) => {
                 <Card>
                     <div className="flex justify-between items-center mb-4">
                         <CardTitle>Historial de Visitantes</CardTitle>
-                        <Button leftIcon={ICONS.plus}>Registrar Visita</Button>
+                        <Button leftIcon={ICONS.plus} onClick={() => setIsAddModalOpen(true)}>Registrar Visita</Button>
                     </div>
                     <CardContent>
                         <div className="overflow-x-auto">
@@ -81,6 +110,31 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ currentUser }) => {
                 </Card>
             </div>
         </div>
+        
+        <Modal
+            isOpen={isAddModalOpen}
+            onClose={() => setIsAddModalOpen(false)}
+            title="Registrar Nueva Visita"
+            footer={<><Button variant='secondary' onClick={() => setIsAddModalOpen(false)}>Cancelar</Button><Button onClick={handleAddVisitor}>Registrar Entrada</Button></>}
+        >
+            <form onSubmit={handleAddVisitor} className="space-y-4">
+                <div>
+                    <label className="block text-sm font-medium">Nombre del Visitante</label>
+                    <input type="text" name="name" value={newVisitor.name} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" required/>
+                </div>
+                <div>
+                    <label className="block text-sm font-medium">Número de ID</label>
+                    <input type="text" name="idNumber" value={newVisitor.idNumber} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" required/>
+                </div>
+                 <div>
+                    <label className="block text-sm font-medium">Propiedad que Visita</label>
+                    <select name="propertyId" value={newVisitor.propertyId} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600" required>
+                        <option value="">Seleccione una propiedad</option>
+                        {properties.map(p => <option key={p.id} value={p.id}>{`Lote ${p.lotNumber} - ${owners.find(o => o.id === p.ownerId)?.name}`}</option>)}
+                    </select>
+                </div>
+            </form>
+        </Modal>
 
         <Card>
             <CardTitle>Cámaras de Seguridad (En vivo)</CardTitle>

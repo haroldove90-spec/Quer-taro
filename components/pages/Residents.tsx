@@ -1,15 +1,45 @@
 
+
 import React, { useState } from 'react';
-import { owners, properties } from '../../data/mockData';
-import { Owner } from '../../types';
+import { Owner, Property } from '../../types';
 import { Card, CardTitle, CardContent } from '../ui/Card';
 import { Table, TableRow, TableCell } from '../ui/Table';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 import { ICONS } from '../../constants';
 
-const ResidentsPage: React.FC = () => {
+interface ResidentsPageProps {
+  owners: Owner[];
+  properties: Property[];
+  addOwner: (owner: Owner) => void;
+}
+
+const ResidentsPage: React.FC<ResidentsPageProps> = ({ owners, properties, addOwner }) => {
   const [selectedOwner, setSelectedOwner] = useState<Owner | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newOwner, setNewOwner] = useState({ name: '', email: '', phone: '' });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewOwner(prev => ({...prev, [name]: value}));
+  };
+
+  const handleAddOwner = (e: React.FormEvent) => {
+    e.preventDefault();
+    const ownerToAdd: Owner = {
+      id: `owner-${Date.now()}`,
+      name: newOwner.name,
+      email: newOwner.email,
+      phone: newOwner.phone,
+      avatar: `https://i.pravatar.cc/150?u=owner-${Date.now()}`,
+      familyMembers: [],
+      vehicles: [],
+      pets: [],
+    };
+    addOwner(ownerToAdd);
+    setIsAddModalOpen(false);
+    setNewOwner({ name: '', email: '', phone: '' });
+  };
 
   const getPropertyInfo = (ownerId: string) => {
     const prop = properties.find(p => p.ownerId === ownerId);
@@ -21,7 +51,7 @@ const ResidentsPage: React.FC = () => {
       <Card>
         <div className="flex justify-between items-center mb-4">
             <CardTitle>Listado de Residentes</CardTitle>
-            <Button leftIcon={ICONS.plus}>Registrar Residente</Button>
+            <Button leftIcon={ICONS.plus} onClick={() => setIsAddModalOpen(true)}>Registrar Residente</Button>
         </div>
         <CardContent>
           <Table headers={['Nombre', 'Contacto', 'Inmueble', 'Acciones']}>
@@ -52,7 +82,36 @@ const ResidentsPage: React.FC = () => {
           </Table>
         </CardContent>
       </Card>
+      
+      {/* Add Resident Modal */}
+      <Modal 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)}
+        title="Registrar Nuevo Residente"
+        footer={
+            <>
+                <Button variant="secondary" onClick={() => setIsAddModalOpen(false)}>Cancelar</Button>
+                <Button onClick={handleAddOwner}>Guardar</Button>
+            </>
+        }
+       >
+        <form onSubmit={handleAddOwner} className="space-y-4">
+            <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre Completo</label>
+                <input type="text" name="name" value={newOwner.name} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600 shadow-sm" required/>
+            </div>
+             <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Correo Electrónico</label>
+                <input type="email" name="email" value={newOwner.email} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600 shadow-sm" required/>
+            </div>
+             <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono</label>
+                <input type="tel" name="phone" value={newOwner.phone} onChange={handleInputChange} className="mt-1 block w-full rounded-md dark:bg-primary-800 border-gray-300 dark:border-primary-600 shadow-sm" required/>
+            </div>
+        </form>
+      </Modal>
 
+      {/* View Details Modal */}
       {selectedOwner && (
         <Modal 
             isOpen={!!selectedOwner} 
