@@ -23,29 +23,31 @@ const PropertiesPage: React.FC = () => {
             <Button leftIcon={ICONS.plus}>Registrar Inmueble</Button>
         </div>
         <CardContent>
-          <Table headers={['Lote', 'Dirección', 'Modelo', 'Propietario', 'Acciones']}>
-            {properties.map(prop => (
-              <TableRow key={prop.id}>
-                <TableCell>
-                  <div className="font-bold text-gray-900 dark:text-white">{prop.lotNumber}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-gray-600 dark:text-gray-300">{prop.address}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-gray-600 dark:text-gray-300">{prop.model}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-gray-600 dark:text-gray-300">{getOwnerName(prop.ownerId)}</div>
-                </TableCell>
-                <TableCell>
-                  <Button size="sm" variant="secondary" onClick={() => setSelectedProperty(prop)}>
-                    Ver Detalles
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </Table>
+          <div className="overflow-x-auto">
+            <Table headers={['Lote', 'Dirección', 'Modelo', 'Propietario', 'Acciones']}>
+              {properties.map(prop => (
+                <TableRow key={prop.id}>
+                  <TableCell className="whitespace-nowrap">
+                    <div className="font-bold text-gray-900 dark:text-white">{prop.lotNumber}</div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <div className="text-gray-600 dark:text-gray-300">{prop.address}</div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <div className="text-gray-600 dark:text-gray-300">{prop.model}</div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <div className="text-gray-600 dark:text-gray-300">{getOwnerName(prop.ownerId)}</div>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <Button size="sm" variant="secondary" onClick={() => setSelectedProperty(prop)}>
+                      Ver Detalles
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </Table>
+          </div>
         </CardContent>
       </Card>
 

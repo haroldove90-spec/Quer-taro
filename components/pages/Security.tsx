@@ -11,7 +11,7 @@ import { Visitor, User, UserRole } from '../../types';
 const getStatusBadge = (status: Visitor['status']) => {
     switch (status) {
       case 'Inside': return <Badge color="green">Adentro</Badge>;
-      case 'Expected': return <Badge color="blue">Esperado</Badge>;
+      case 'Expected': return <Badge color="primary">Esperado</Badge>;
       case 'Departed': return <Badge color="gray">Salió</Badge>;
       default: return <Badge color="gray">Desconocido</Badge>;
     }
@@ -39,20 +39,22 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ currentUser }) => {
                         <Button leftIcon={ICONS.plus}>Registrar Visita</Button>
                     </div>
                     <CardContent>
-                        <Table headers={['Visitante', 'Propiedad', 'Entrada', 'Salida', 'Estatus']}>
-                            {visitors.map(v => (
-                                <TableRow key={v.id}>
-                                    <TableCell>
-                                        <div className="font-medium text-gray-900 dark:text-white">{v.name}</div>
-                                        <div className="text-gray-500 dark:text-gray-400 text-xs">ID: {v.idNumber}</div>
-                                    </TableCell>
-                                    <TableCell>{getPropertyInfo(v.propertyId)}</TableCell>
-                                    <TableCell>{v.entryDate}</TableCell>
-                                    <TableCell>{v.exitDate || 'N/A'}</TableCell>
-                                    <TableCell>{getStatusBadge(v.status)}</TableCell>
-                                </TableRow>
-                            ))}
-                        </Table>
+                        <div className="overflow-x-auto">
+                            <Table headers={['Visitante', 'Propiedad', 'Entrada', 'Salida', 'Estatus']}>
+                                {visitors.map(v => (
+                                    <TableRow key={v.id}>
+                                        <TableCell className="whitespace-nowrap">
+                                            <div className="font-medium text-gray-900 dark:text-white">{v.name}</div>
+                                            <div className="text-gray-500 dark:text-gray-400 text-xs">ID: {v.idNumber}</div>
+                                        </TableCell>
+                                        <TableCell className="whitespace-nowrap">{getPropertyInfo(v.propertyId)}</TableCell>
+                                        <TableCell className="whitespace-nowrap">{v.entryDate}</TableCell>
+                                        <TableCell className="whitespace-nowrap">{v.exitDate || 'N/A'}</TableCell>
+                                        <TableCell className="whitespace-nowrap">{getStatusBadge(v.status)}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </Table>
+                        </div>
                     </CardContent>
                 </Card>
             </div>

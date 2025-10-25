@@ -65,17 +65,19 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({ currentUser }) => {
                     <Button leftIcon={ICONS.plus}>Nuevo Reporte</Button>
                 </div>
                 <CardContent>
-                    <Table headers={['Área', 'Propiedad', 'Fecha', 'Descripción', 'Estatus']}>
-                        {maintenanceRequests.sort((a, b) => new Date(b.submittedDate).getTime() - new Date(a.submittedDate).getTime()).map(req => (
-                            <TableRow key={req.id}>
-                                <TableCell><div className="font-medium text-gray-900 dark:text-white">{req.area}</div></TableCell>
-                                <TableCell>{getPropertyLot(req.propertyId)}</TableCell>
-                                <TableCell>{req.submittedDate}</TableCell>
-                                <TableCell><p className="truncate max-w-xs">{req.description}</p></TableCell>
-                                <TableCell>{getStatusBadge(req.status)}</TableCell>
-                            </TableRow>
-                        ))}
-                    </Table>
+                    <div className="overflow-x-auto">
+                        <Table headers={['Área', 'Propiedad', 'Fecha', 'Descripción', 'Estatus']}>
+                            {maintenanceRequests.sort((a, b) => new Date(b.submittedDate).getTime() - new Date(a.submittedDate).getTime()).map(req => (
+                                <TableRow key={req.id}>
+                                    <TableCell className="whitespace-nowrap"><div className="font-medium text-gray-900 dark:text-white">{req.area}</div></TableCell>
+                                    <TableCell className="whitespace-nowrap">{getPropertyLot(req.propertyId)}</TableCell>
+                                    <TableCell className="whitespace-nowrap">{req.submittedDate}</TableCell>
+                                    <TableCell className="whitespace-nowrap"><p>{req.description}</p></TableCell>
+                                    <TableCell className="whitespace-nowrap">{getStatusBadge(req.status)}</TableCell>
+                                </TableRow>
+                            ))}
+                        </Table>
+                    </div>
                 </CardContent>
             </Card>
 

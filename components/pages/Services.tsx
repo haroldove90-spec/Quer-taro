@@ -49,24 +49,26 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ currentUser }) => {
             {canManagePackages && <Button leftIcon={ICONS.plus}>Registrar Paquete</Button>}
           </div>
           <CardContent>
-            <Table headers={['Propiedad', 'Paquetería', 'Fecha de Recibo', 'Estatus', 'Acciones']}>
-              {packages.map(pkg => (
-                <TableRow key={pkg.id}>
-                  <TableCell>{getPropertyLot(pkg.propertyId)}</TableCell>
-                  <TableCell>{pkg.carrier}</TableCell>
-                  <TableCell>{pkg.receivedDate}</TableCell>
-                  <TableCell>{getPackageStatusBadge(pkg.status)}</TableCell>
-                  <TableCell>
-                    {canManagePackages && pkg.status === 'Recibido en caseta' && (
-                      <Button size="sm" variant="primary">Entregar</Button>
-                    )}
-                     {currentUser.role === UserRole.Resident && pkg.status === 'Recibido en caseta' && (
-                      <p className='text-xs text-gray-500'>Recoger en caseta</p>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </Table>
+            <div className="overflow-x-auto">
+              <Table headers={['Propiedad', 'Paquetería', 'Fecha de Recibo', 'Estatus', 'Acciones']}>
+                {packages.map(pkg => (
+                  <TableRow key={pkg.id}>
+                    <TableCell className="whitespace-nowrap">{getPropertyLot(pkg.propertyId)}</TableCell>
+                    <TableCell className="whitespace-nowrap">{pkg.carrier}</TableCell>
+                    <TableCell className="whitespace-nowrap">{pkg.receivedDate}</TableCell>
+                    <TableCell className="whitespace-nowrap">{getPackageStatusBadge(pkg.status)}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      {canManagePackages && pkg.status === 'Recibido en caseta' && (
+                        <Button size="sm" variant="primary">Entregar</Button>
+                      )}
+                      {currentUser.role === UserRole.Resident && pkg.status === 'Recibido en caseta' && (
+                        <p className='text-xs text-gray-500'>Recoger en caseta</p>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </Table>
+            </div>
           </CardContent>
         </Card>
       )}
