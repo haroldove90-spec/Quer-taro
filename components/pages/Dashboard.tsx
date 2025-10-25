@@ -4,7 +4,6 @@ import { Card, CardTitle, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { User, UserRole, Property, Owner, Transaction, MaintenanceRequest, AmenityBooking, Announcement, Package } from '../../types';
 
-// FIX: Replaced JSX.Element with React.ReactElement to resolve namespace issue.
 const StatCard: React.FC<{ title: string; value: string | number; icon: React.ReactElement }> = ({ title, value, icon }) => (
   <Card>
     <div className="flex items-center">
