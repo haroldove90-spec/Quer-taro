@@ -3,12 +3,12 @@
   "name": "Bosques de los Encinos Condo Manager",
   "icons": [
     {
-      "src": "https://appdesignmex.com/icono.png",
+      "src": "https://appdesignmex.com/bosques.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "https://appdesignmex.com/icono.png",
+      "src": "https://appdesignmex.com/bosques.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
