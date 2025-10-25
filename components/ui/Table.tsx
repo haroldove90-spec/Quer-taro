@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface TableProps {
@@ -7,8 +8,8 @@ interface TableProps {
 
 export const Table: React.FC<TableProps> = ({ headers, children }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-primary-700">
+    <div className="w-full">
+      <table className="w-full table-fixed divide-y divide-gray-200 dark:divide-primary-700">
         <thead className="bg-gray-50 dark:bg-primary-800">
           <tr>
             {headers.map((header, index) => (
@@ -38,4 +39,4 @@ interface TableCellProps {
     className?: string;
 }
 
-export const TableCell: React.FC<TableCellProps> = ({children, className}) => <td className={`px-3 md:px-6 py-4 text-sm align-top ${className}`}>{children}</td>;
+export const TableCell: React.FC<TableCellProps> = ({children, className}) => <td className={`px-3 md:px-6 py-4 text-sm align-top break-words ${className}`}>{children}</td>;

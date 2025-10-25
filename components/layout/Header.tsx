@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { ICONS } from '../../constants';
+import { ICONS, NAV_ITEMS } from '../../constants';
 import { Page, User } from '../../types';
 
 interface HeaderProps {
@@ -13,7 +13,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ activePage, toggleSidebar, currentUser, installPrompt, onInstallClick }) => {
-  const pageTitle = activePage.charAt(0).toUpperCase() + activePage.slice(1);
+  const navItem = NAV_ITEMS.find(item => item.id === activePage);
+  const pageTitle = navItem ? navItem.name : activePage.charAt(0).toUpperCase() + activePage.slice(1);
   
   if (!currentUser) return null;
 
