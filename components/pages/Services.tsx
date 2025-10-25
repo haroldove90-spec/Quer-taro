@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { Card, CardTitle, CardContent } from '../ui/Card';
 import { Table, TableRow, TableCell } from '../ui/Table';
@@ -80,7 +81,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ currentUser }) => {
             <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {marketplaceItems.map(item => (
-                        <div key={item.id} className="border dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div key={item.id} className="border dark:border-primary-700 rounded-lg overflow-hidden">
                             <img src={item.imageUrl} alt={item.title} className="w-full h-48 object-cover"/>
                             <div className="p-4">
                                 <h4 className="font-bold text-lg text-gray-900 dark:text-white">{item.title}</h4>
@@ -106,7 +107,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ currentUser }) => {
                 <CardContent>
                     <ul className="space-y-3">
                         {localBusinesses.map(biz => (
-                            <li key={biz.id} className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                            <li key={biz.id} className="p-3 bg-gray-50 dark:bg-primary-800/50 rounded-lg">
                                 <p className="font-semibold text-gray-800 dark:text-gray-100">{biz.name} <Badge color="primary">{biz.category}</Badge></p>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">{biz.address} - {biz.phone}</p>
                             </li>

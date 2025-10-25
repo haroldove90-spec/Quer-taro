@@ -9,8 +9,8 @@ interface TableProps {
 export const Table: React.FC<TableProps> = ({ headers, children }) => {
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead className="bg-gray-50 dark:bg-gray-700">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-primary-700">
+        <thead className="bg-gray-50 dark:bg-primary-800">
           <tr>
             {headers.map((header, index) => (
               <th key={index} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -19,7 +19,7 @@ export const Table: React.FC<TableProps> = ({ headers, children }) => {
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="bg-white dark:bg-primary-900 divide-y divide-gray-200 dark:divide-primary-700">
           {children}
         </tbody>
       </table>

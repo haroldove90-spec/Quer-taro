@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { users as initialUsers } from '../../data/mockData';
 import { UserRole, User } from '../../types';
@@ -39,7 +40,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser }) => {
                                     <select
                                         value={user.role}
                                         onChange={(e) => handleRoleChange(user.id, e.target.value as UserRole)}
-                                        className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 dark:border-gray-600"
+                                        className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-primary-800 dark:border-primary-600"
                                         // Disable changing the current admin's role to prevent lockout
                                         disabled={user.id === currentUser?.id && currentUser?.role === UserRole.Admin}
                                     >

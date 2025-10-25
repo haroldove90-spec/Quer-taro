@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { UserRole } from '../../types';
 import { APP_NAME, ICONS } from '../../constants';
@@ -10,8 +11,8 @@ interface LoginPageProps {
 
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-primary-950">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white dark:bg-primary-900 rounded-2xl shadow-xl">
         <div className="text-center">
             <div className="mb-4">
                  <img src="https://appdesignmex.com/bosques.png" alt="Logo" className="h-20 w-auto mx-auto" />

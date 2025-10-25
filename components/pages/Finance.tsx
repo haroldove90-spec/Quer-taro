@@ -131,7 +131,7 @@ const FinancePage: React.FC<FinancePageProps> = ({ currentUser }) => {
                 <CardContent>
                     <ul className="space-y-3">
                         {expenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map(exp => (
-                            <li key={exp.id} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                            <li key={exp.id} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-primary-800/50 rounded-lg">
                                 <div>
                                     <p className="font-semibold text-gray-800 dark:text-gray-100">{exp.description}</p>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">{exp.date} - <Badge color="primary">{exp.category}</Badge></p>

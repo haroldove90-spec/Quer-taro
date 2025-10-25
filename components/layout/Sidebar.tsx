@@ -8,13 +8,11 @@ interface SidebarProps {
   activePage: Page;
   setActivePage: (page: Page) => void;
   isSidebarOpen: boolean;
-  installPrompt: any;
-  onInstallClick: () => void;
   currentUser: User | null;
   onLogout: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, isSidebarOpen, installPrompt, onInstallClick, currentUser, onLogout }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, isSidebarOpen, currentUser, onLogout }) => {
   const visibleNavItems = NAV_ITEMS.filter(item => 
     currentUser && item.roles.includes(currentUser.role)
   );
@@ -47,19 +45,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, isSidebarO
           ))}
         </ul>
         <div className="mt-auto">
-            {installPrompt && (
-                <a
-                    href="#"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        onInstallClick();
-                    }}
-                    className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-primary-700 hover:text-white group"
-                >
-                    {ICONS.install}
-                    <span className="ml-3 font-medium">Instalar App</span>
-                </a>
-            )}
             <a
                 href="#"
                 onClick={(e) => {

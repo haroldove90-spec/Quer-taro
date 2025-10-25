@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { announcements } from '../../data/mockData';
 import { Card, CardContent, CardTitle } from '../ui/Card';
@@ -31,7 +32,7 @@ const Communication: React.FC = () => {
             <CardContent>
               <div className="space-y-4">
                 {announcements.map((ann) => (
-                  <div key={ann.id} className="p-4 border dark:border-gray-700 rounded-lg">
+                  <div key={ann.id} className="p-4 border dark:border-primary-700 rounded-lg">
                     <h4 className="font-bold text-lg text-gray-900 dark:text-white">{ann.title}</h4>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{ann.date} por {ann.author}</p>
                     <p className="text-gray-700 dark:text-gray-300">{ann.content}</p>
@@ -53,7 +54,7 @@ const Communication: React.FC = () => {
                   id="topic"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 bg-white dark:bg-primary-800 border border-gray-300 dark:border-primary-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                   placeholder="Ej: Fumigación en áreas comunes"
                 />
               </div>

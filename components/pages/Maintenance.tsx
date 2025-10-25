@@ -84,7 +84,7 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({ currentUser }) => {
                 <CardContent>
                      <ul className="space-y-4">
                         {amenityBookings.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).map(booking => (
-                            <li key={booking.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                            <li key={booking.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 bg-gray-50 dark:bg-primary-800/50 rounded-lg">
                             <div className="mb-2 sm:mb-0">
                                 <p className="font-semibold text-gray-800 dark:text-gray-100">{booking.amenity}</p>
                                 <p className="text-sm text-gray-600 dark:text-gray-300">Reservado por: {getPropertyLot(booking.propertyId)}</p>
@@ -110,7 +110,7 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({ currentUser }) => {
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Servicios recomendados y calificados por la comunidad.</p>
                     <ul className="space-y-4">
                         {providers.map(p => (
-                            <li key={p.id} className="p-3 border dark:border-gray-700 rounded-lg">
+                            <li key={p.id} className="p-3 border dark:border-primary-700 rounded-lg">
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className="font-bold text-gray-900 dark:text-white">{p.name}</p>

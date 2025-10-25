@@ -96,7 +96,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div className="flex h-screen bg-gray-100 dark:bg-primary-950 text-gray-800 dark:text-gray-200">
       <Sidebar 
         activePage={activePage} 
         setActivePage={(page) => {
@@ -104,17 +104,18 @@ const App: React.FC = () => {
             setSidebarOpen(false); // Close sidebar on navigation on mobile
         }}
         isSidebarOpen={isSidebarOpen} 
-        installPrompt={installPrompt}
-        onInstallClick={() => {
-          handleInstallClick();
-          setSidebarOpen(false);
-        }}
         currentUser={currentUser}
         onLogout={handleLogout}
       />
       <div className={`flex-1 flex flex-col transition-all duration-300 sm:ml-64`}>
         {isSidebarOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black opacity-50 z-30 sm:hidden"></div>}
-        <Header activePage={activePage} toggleSidebar={toggleSidebar} currentUser={currentUser}/>
+        <Header 
+          activePage={activePage} 
+          toggleSidebar={toggleSidebar} 
+          currentUser={currentUser}
+          installPrompt={installPrompt}
+          onInstallClick={handleInstallClick}
+        />
         <main className="flex-1 overflow-y-auto">
           {renderPage()}
         </main>

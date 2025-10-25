@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { ICONS } from '../../constants';
 import { Page, User } from '../../types';
@@ -7,15 +8,17 @@ interface HeaderProps {
   activePage: Page;
   toggleSidebar: () => void;
   currentUser: User | null;
+  installPrompt: any;
+  onInstallClick: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ activePage, toggleSidebar, currentUser }) => {
+const Header: React.FC<HeaderProps> = ({ activePage, toggleSidebar, currentUser, installPrompt, onInstallClick }) => {
   const pageTitle = activePage.charAt(0).toUpperCase() + activePage.slice(1);
   
   if (!currentUser) return null;
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm p-4 flex justify-between items-center">
+    <header className="bg-white dark:bg-primary-900 shadow-sm p-4 flex justify-between items-center">
       <div className="flex items-center">
         <button onClick={toggleSidebar} className="sm:hidden text-gray-500 dark:text-gray-400 mr-4">
           {ICONS.menu}
@@ -23,6 +26,16 @@ const Header: React.FC<HeaderProps> = ({ activePage, toggleSidebar, currentUser 
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white capitalize">{pageTitle}</h1>
       </div>
       <div className="flex items-center space-x-4">
+        {installPrompt && (
+            <button
+                onClick={onInstallClick}
+                className="flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                title="Instalar Aplicación"
+            >
+                {ICONS.install}
+                <span className="ml-2 hidden sm:inline">Instalar App</span>
+            </button>
+        )}
         <button className="relative text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
           {ICONS.notification}
           <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
