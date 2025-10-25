@@ -71,4 +71,28 @@ export enum UserRole {
   Guard = 'Vigilante',
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  avatar: string;
+}
+
+export interface Provider {
+  id: string;
+  name: string;
+  service: string;
+  phone: string;
+  rating: number;
+}
+
 export type Page = 'dashboard' | 'properties' | 'residents' | 'communication' | 'finance' | 'security' | 'maintenance' | 'settings';
+
+export interface Expense {
+  id: string;
+  date: string;
+  category: 'Mantenimiento' | 'Personal' | 'Servicios' | 'Administrativo';
+  description: string;
+  amount: number;
+}

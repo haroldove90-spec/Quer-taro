@@ -3,25 +3,20 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
 import Dashboard from './components/pages/Dashboard';
+import PropertiesPage from './components/pages/Properties';
+import ResidentsPage from './components/pages/Residents';
 import Communication from './components/pages/Communication';
-import { Page } from './types';
+import FinancePage from './components/pages/Finance';
+import SecurityPage from './components/pages/Security';
+import MaintenancePage from './components/pages/Maintenance';
+import SettingsPage from './components/pages/Settings';
+import LoginPage from './components/pages/Login';
+import { Page, User, UserRole } from './types';
+import { users } from './data/mockData';
 import AIAssistant from './components/AIAssistant';
 
-// Placeholder components for other pages
-const PlaceholderPage: React.FC<{ title: string }> = ({ title }) => (
-    <div className="p-6">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{title}</h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">Funcionalidad en construcción.</p>
-    </div>
-);
-const PropertiesPage = () => <PlaceholderPage title="Gestión de Inmuebles" />;
-const ResidentsPage = () => <PlaceholderPage title="Gestión de Residentes" />;
-const FinancePage = () => <PlaceholderPage title="Finanzas y Contabilidad" />;
-const SecurityPage = () => <PlaceholderPage title="Seguridad y Control de Acceso" />;
-const MaintenancePage = () => <PlaceholderPage title="Mantenimiento y Servicios" />;
-const SettingsPage = () => <PlaceholderPage title="Ajustes y Permisos" />;
-
 const App: React.FC = () => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [activePage, setActivePage] = useState<Page>('dashboard');
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
@@ -37,6 +32,18 @@ const App: React.FC = () => {
       window.removeEventListener('beforeinstallprompt', handler);
     };
   }, []);
+
+  const handleLogin = (role: UserRole) => {
+    const user = users.find(u => u.role === role);
+    if (user) {
+      setCurrentUser(user);
+      setActivePage('dashboard');
+    }
+  };
+  
+  const handleLogout = () => {
+    setCurrentUser(null);
+  }
 
   const handleInstallClick = () => {
     if (!installPrompt) {
@@ -54,6 +61,7 @@ const App: React.FC = () => {
   };
 
   const renderPage = () => {
+    if (!currentUser) return null;
     switch (activePage) {
       case 'dashboard':
         return <Dashboard />;
@@ -66,17 +74,21 @@ const App: React.FC = () => {
       case 'finance':
         return <FinancePage />;
       case 'security':
-        return <SecurityPage />;
+        return <SecurityPage currentUser={currentUser} />;
       case 'maintenance':
         return <MaintenancePage />;
       case 'settings':
-        return <SettingsPage />;
+        return <SettingsPage currentUser={currentUser} />;
       default:
         return <Dashboard />;
     }
   };
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
+  if (!currentUser) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -92,10 +104,12 @@ const App: React.FC = () => {
           handleInstallClick();
           setSidebarOpen(false);
         }}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
       <div className={`flex-1 flex flex-col transition-all duration-300 sm:ml-64`}>
         {isSidebarOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black opacity-50 z-30 sm:hidden"></div>}
-        <Header activePage={activePage} toggleSidebar={toggleSidebar} />
+        <Header activePage={activePage} toggleSidebar={toggleSidebar} currentUser={currentUser}/>
         <main className="flex-1 overflow-y-auto">
           {renderPage()}
         </main>

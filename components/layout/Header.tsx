@@ -1,16 +1,19 @@
+
 import React from 'react';
 import { ICONS } from '../../constants';
-import { currentUser } from '../../data/mockData';
-import { Page } from '../../types';
+import { Page, User } from '../../types';
 
 interface HeaderProps {
   activePage: Page;
   toggleSidebar: () => void;
+  currentUser: User | null;
 }
 
-const Header: React.FC<HeaderProps> = ({ activePage, toggleSidebar }) => {
+const Header: React.FC<HeaderProps> = ({ activePage, toggleSidebar, currentUser }) => {
   const pageTitle = activePage.charAt(0).toUpperCase() + activePage.slice(1);
   
+  if (!currentUser) return null;
+
   return (
     <header className="bg-white dark:bg-gray-800 shadow-sm p-4 flex justify-between items-center">
       <div className="flex items-center">
