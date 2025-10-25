@@ -1,5 +1,4 @@
-
-const CACHE_NAME = 'llama-queretaro-cache-v3';
+const CACHE_NAME = 'llama-queretaro-cache-v4';
 // The start_url in manifest.json is '.', which resolves to the root.
 // We will cache '/index.html' and serve it for all navigation requests.
 const APP_SHELL_URL = '/index.html';
@@ -18,6 +17,11 @@ self.addEventListener('install', event => {
       .then(cache => {
         console.log('Service Worker: Caching App Shell');
         return cache.addAll(urlsToCache);
+      })
+      .then(() => {
+        // Force the waiting service worker to become the active service worker.
+        console.log('Service Worker: Forcing activation with skipWaiting().');
+        return self.skipWaiting();
       })
       .catch(error => {
         console.error('Service Worker: Caching failed:', error);
