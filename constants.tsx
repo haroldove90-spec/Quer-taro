@@ -3,7 +3,7 @@
 import React from 'react';
 import { Page, UserRole } from './types';
 
-export const APP_NAME = "Llama Querétaro";
+export const APP_NAME = "Bosques de los Encinos";
 
 // FIX: Replaced JSX.Element with React.ReactElement to resolve namespace issue.
 export const ICONS: { [key: string]: React.ReactElement } = {

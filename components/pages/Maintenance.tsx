@@ -12,7 +12,7 @@ import { MaintenanceRequest, User, UserRole } from '../../types';
 const getStatusBadge = (status: MaintenanceRequest['status']) => {
     switch (status) {
       case 'Completed': return <Badge color="green">Completado</Badge>;
-      case 'In Progress': return <Badge color="blue">En Progreso</Badge>;
+      case 'In Progress': return <Badge color="primary">En Progreso</Badge>;
       case 'Pending': return <Badge color="yellow">Pendiente</Badge>;
       default: return <Badge color="gray">Desconocido</Badge>;
     }
@@ -90,7 +90,7 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({ currentUser }) => {
                                 <p className="text-sm text-gray-600 dark:text-gray-300">Reservado por: {getPropertyLot(booking.propertyId)}</p>
                             </div>
                             <div className="text-left sm:text-right">
-                                <p className="text-sm font-medium text-primary-600 dark:text-primary-400 flex items-center">
+                                <p className="text-sm font-medium text-secondary-600 dark:text-secondary-400 flex items-center">
                                     {ICONS.calendar}
                                     <span className="ml-2">{new Date(booking.date).toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                 </p>

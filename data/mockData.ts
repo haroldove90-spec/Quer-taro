@@ -53,7 +53,7 @@ export const properties: Property[] = [
   {
     id: 'prop-1',
     lotNumber: 15,
-    address: 'Av. del Llama 15, Querétaro',
+    address: 'Av. de los Encinos 15, Querétaro',
     model: 'Zafiro',
     sqMeters: 180,
     ownerId: 'owner-1',
@@ -63,7 +63,7 @@ export const properties: Property[] = [
   {
     id: 'prop-2',
     lotNumber: 22,
-    address: 'Av. del Llama 22, Querétaro',
+    address: 'Av. de los Encinos 22, Querétaro',
     model: 'Esmeralda',
     sqMeters: 210,
     ownerId: 'owner-2',
@@ -73,7 +73,7 @@ export const properties: Property[] = [
   {
     id: 'prop-3',
     lotNumber: 8,
-    address: 'Av. del Llama 8, Querétaro',
+    address: 'Av. de los Encinos 8, Querétaro',
     model: 'Zafiro',
     sqMeters: 180,
     ownerId: 'owner-3',
@@ -86,7 +86,7 @@ export const properties: Property[] = [
   {
     id: 'prop-4',
     lotNumber: 31,
-    address: 'Av. del Llama 31, Querétaro',
+    address: 'Av. de los Encinos 31, Querétaro',
     model: 'Rubí',
     sqMeters: 250,
     ownerId: 'owner-4',
@@ -156,9 +156,9 @@ export const amenityBookings: AmenityBooking[] = [
 ];
 
 export const users: User[] = [
-    { id: 'user-1', name: 'Admin Llama', email: 'admin@llamaqro.com', role: UserRole.Admin, avatar: 'https://i.pravatar.cc/150?u=admin' },
+    { id: 'user-1', name: 'Admin Bosques', email: 'admin@bosquesencinos.com', role: UserRole.Admin, avatar: 'https://i.pravatar.cc/150?u=admin' },
     { id: 'user-2', name: 'Carlos Hernandez', email: 'carlos@example.com', role: UserRole.Resident, avatar: 'https://i.pravatar.cc/150?u=owner-1' },
-    { id: 'user-3', name: 'Guardia A', email: 'guardia_a@llamaqro.com', role: UserRole.Guard, avatar: 'https://i.pravatar.cc/150?u=guard-1' },
+    { id: 'user-3', name: 'Guardia A', email: 'guardia_a@bosquesencinos.com', role: UserRole.Guard, avatar: 'https://i.pravatar.cc/150?u=guard-1' },
     { id: 'user-4', name: 'Sofia Rodriguez', email: 'sofia@example.com', role: UserRole.Resident, avatar: 'https://i.pravatar.cc/150?u=owner-2' },
 ];
 

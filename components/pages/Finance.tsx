@@ -12,7 +12,7 @@ import { Transaction, User, UserRole } from '../../types';
 const StatCard: React.FC<{ title: string; value: string | number; icon: React.ReactElement; helpText?: string }> = ({ title, value, icon, helpText }) => (
   <Card>
     <div className="flex items-center">
-      <div className="p-3 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-300 mr-4">
+      <div className="p-3 rounded-full bg-secondary-100 dark:bg-secondary-900 text-secondary-600 dark:text-secondary-300 mr-4">
         {icon}
       </div>
       <div>
@@ -134,7 +134,7 @@ const FinancePage: React.FC<FinancePageProps> = ({ currentUser }) => {
                             <li key={exp.id} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                                 <div>
                                     <p className="font-semibold text-gray-800 dark:text-gray-100">{exp.description}</p>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">{exp.date} - <Badge color="blue">{exp.category}</Badge></p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">{exp.date} - <Badge color="primary">{exp.category}</Badge></p>
                                 </div>
                                 <p className="font-bold text-red-600 dark:text-red-400">{formatCurrency(exp.amount)}</p>
                             </li>

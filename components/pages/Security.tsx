@@ -63,7 +63,7 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ currentUser }) => {
                         <CardTitle>Mi Acceso Digital</CardTitle>
                         <CardContent className="text-center">
                             <p className="mb-4 text-gray-600 dark:text-gray-400">Muestra este código QR en la entrada para un acceso rápido.</p>
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UserID-Resident-12345-LlamaQro" alt="QR Code" className="mx-auto rounded-lg" />
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UserID-Resident-12345-BosquesEncinos" alt="QR Code" className="mx-auto rounded-lg" />
                         </CardContent>
                     </Card>
                 )}

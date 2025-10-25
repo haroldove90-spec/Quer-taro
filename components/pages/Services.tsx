@@ -22,7 +22,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ currentUser }) => {
   
   const getPackageStatusBadge = (status: Package['status']) => {
     switch (status) {
-      case 'Recibido en caseta': return <Badge color="blue">En Caseta</Badge>;
+      case 'Recibido en caseta': return <Badge color="primary">En Caseta</Badge>;
       case 'Entregado al residente': return <Badge color="green">Entregado</Badge>;
       default: return <Badge color="gray">Desconocido</Badge>;
     }
@@ -107,7 +107,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ currentUser }) => {
                     <ul className="space-y-3">
                         {localBusinesses.map(biz => (
                             <li key={biz.id} className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                                <p className="font-semibold text-gray-800 dark:text-gray-100">{biz.name} <Badge color="blue">{biz.category}</Badge></p>
+                                <p className="font-semibold text-gray-800 dark:text-gray-100">{biz.name} <Badge color="primary">{biz.category}</Badge></p>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">{biz.address} - {biz.phone}</p>
                             </li>
                         ))}

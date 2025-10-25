@@ -13,8 +13,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md p-8 space-y-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl">
         <div className="text-center">
-            <div className="inline-block p-4 bg-primary-100 dark:bg-primary-900 rounded-full mb-4">
-                 <svg className="h-12 w-12 text-primary-600" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="currentColor"/><path d="M79.5 52.83V79H20.5V52.83L50 29.5l29.5 23.33zM73 72.5V55.42L50 37.25 27 55.42V72.5h14.67v-12h16.66v12H73z" fill="#fff"/></svg>
+            <div className="mb-4">
+                 <img src="https://appdesignmex.com/bosques.png" alt="Logo" className="h-20 w-auto mx-auto" />
             </div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">{APP_NAME}</h1>
             <p className="mt-2 text-gray-600 dark:text-gray-400">Panel de Administración</p>

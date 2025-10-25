@@ -1,4 +1,4 @@
-const CACHE_NAME = 'llama-queretaro-cache-v5';
+const CACHE_NAME = 'bosques-encinos-cache-v1';
 // The start_url in manifest.json is '/', which resolves to the root.
 // We will cache '/index.html' and serve it for all navigation requests.
 const APP_SHELL_URL = '/index.html';

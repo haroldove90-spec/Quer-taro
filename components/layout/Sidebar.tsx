@@ -20,10 +20,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, isSidebarO
   );
 
   return (
-    <aside className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 bg-secondary`}>
+    <aside className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 bg-primary-800`}>
       <div className="h-full px-3 py-4 overflow-y-auto flex flex-col">
-        <div className="flex items-center pl-2.5 mb-5">
-            <span className="text-2xl font-bold text-white tracking-wider">{APP_NAME}</span>
+        <div className="flex items-center justify-center p-2 mb-5">
+            <img src="https://appdesignmex.com/bosques.png" alt="Logo" className="h-16" />
         </div>
         <ul className="space-y-2 font-medium flex-grow">
           {visibleNavItems.map((item) => (
@@ -37,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, isSidebarO
                 className={`flex items-center p-2 rounded-lg group transition-colors duration-200 ${
                   activePage === item.id
                     ? 'bg-primary-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    : 'text-gray-300 hover:bg-primary-700 hover:text-white'
                 }`}
               >
                 {item.icon}
@@ -54,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, isSidebarO
                         e.preventDefault();
                         onInstallClick();
                     }}
-                    className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white group"
+                    className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-primary-700 hover:text-white group"
                 >
                     {ICONS.install}
                     <span className="ml-3 font-medium">Instalar App</span>
@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, isSidebarO
                     e.preventDefault();
                     onLogout();
                 }}
-                className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white group"
+                className="flex items-center p-2 text-gray-300 rounded-lg hover:bg-primary-700 hover:text-white group"
             >
                 {ICONS.logout}
                 <span className="ml-3 font-medium">Cerrar Sesión</span>

@@ -23,7 +23,7 @@ const getAiClient = (() => {
 
 
 const CONDO_RULES = `
-Reglamento de la privada "Llama Querétaro":
+Reglamento de la privada "Bosques de los Encinos":
 - Horario de la alberca: 9 AM a 9 PM, todos los días.
 - Salón de eventos: Se debe reservar con al menos 1 semana de anticipación. Costo de $2,000 MXN.
 - Cuotas de mantenimiento: Vencen los primeros 5 días de cada mes.
@@ -44,7 +44,7 @@ export const getAIResponse = async (prompt: string) => {
       model: "gemini-2.5-flash",
       contents: prompt,
       config: {
-        systemInstruction: `Eres un asistente virtual para la administración del condominio "Llama Querétaro". Responde las preguntas de los residentes de forma amable y concisa, basándote únicamente en la siguiente información del reglamento. Si no sabes la respuesta, di que consultarás con la administración. \n\n${CONDO_RULES}`,
+        systemInstruction: `Eres un asistente virtual para la administración del condominio "Bosques de los Encinos". Responde las preguntas de los residentes de forma amable y concisa, basándote únicamente en la siguiente información del reglamento. Si no sabes la respuesta, di que consultarás con la administración. \n\n${CONDO_RULES}`,
         temperature: 0.5,
       }
     });
@@ -62,12 +62,12 @@ export const generateAnnouncement = async (topic: string) => {
   }
   
   try {
-    const prompt = `Genera un comunicado oficial y amigable para los residentes del condominio "Llama Querétaro" sobre el siguiente tema: "${topic}". El tono debe ser profesional pero cercano. Incluye un título y el cuerpo del mensaje.`;
+    const prompt = `Genera un comunicado oficial y amigable para los residentes del condominio "Bosques de los Encinos" sobre el siguiente tema: "${topic}". El tono debe ser profesional pero cercano. Incluye un título y el cuerpo del mensaje.`;
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: prompt,
        config: {
-        systemInstruction: "Eres un asistente de redacción para el administrador del condominio Llama Querétaro. Tu tarea es escribir comunicados claros y profesionales.",
+        systemInstruction: "Eres un asistente de redacción para el administrador del condominio Bosques de los Encinos. Tu tarea es escribir comunicados claros y profesionales.",
         temperature: 0.7,
       }
     });

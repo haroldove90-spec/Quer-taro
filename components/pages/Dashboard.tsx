@@ -7,7 +7,7 @@ import { Badge } from '../ui/Badge';
 const StatCard: React.FC<{ title: string; value: string | number; icon: React.ReactElement }> = ({ title, value, icon }) => (
   <Card>
     <div className="flex items-center">
-      <div className="p-3 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-300 mr-4">
+      <div className="p-3 rounded-full bg-secondary-100 dark:bg-secondary-900 text-secondary-600 dark:text-secondary-300 mr-4">
         {icon}
       </div>
       <div>
